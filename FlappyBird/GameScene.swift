@@ -706,8 +706,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             heartGetPlayer.currentTime = 0
             heartGetPlayer.play()
             
+            heartPoint += 1
+            heartPointLabelNode.text = " ❤️ x \(heartPoint)"
             
-            // アイテムを消去
+            // ハートを消去
             if (contact.bodyA.categoryBitMask & heartCategory) == heartCategory {
                 contact.bodyA.node?.removeFromParent()
                 
@@ -715,9 +717,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 contact.bodyB.node?.removeFromParent()
             }
             
-            heartPoint += 1
-            // ハートの表示を　＋１したい
-            //heartPointLabelNode.text = "  x \(heartPoint)"
+            
             
             
         } else  if (contact.bodyA.categoryBitMask & deadlineCategory) == deadlineCategory || (contact.bodyB.categoryBitMask & deadlineCategory) == deadlineCategory {
@@ -751,26 +751,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             
         } else {
+            //　壁か地面と衝突した
             crashPlayer.currentTime = 0 // 巻き戻しておく. play()後に巻き戻すべき？？
-             crashPlayer.play()
-             //　壁か地面と衝突した
-             heartPoint -= 1
-             heartPointLabelNode.text = " ❤️ x \(heartPoint)"
+            crashPlayer.play()
+             
+            heartPoint -= 1
+            heartPointLabelNode.text = " ❤️ x \(heartPoint)"
             
                             
              
-             if heartPoint == 0 {
+            if heartPoint == 0 { // ハートがなくなってしまった
                  
-                 crashPlayer.play()
-                 crashPlayer.currentTime = 0
+                crashPlayer.play()
+                crashPlayer.currentTime = 0
                  
-                 print("GameOver")
-                 gameOverLabelNode.isHidden = false
+                print("GameOver")
+                gameOverLabelNode.isHidden = false  // ゲームオーバーを表示
                  
-                 //BGMを止める
-                 let stopPlaying = SKAction.stop()
-                 bgmNode.run(stopPlaying)
-                 self.bgmCreditLabelNode.isHidden = true
+                //BGMを止める
+                let stopPlaying = SKAction.stop()
+                bgmNode.run(stopPlaying)
+                self.bgmCreditLabelNode.isHidden = true
                  
                  
                  // スクロールを停止させる
@@ -869,6 +870,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         itemNode.removeAllChildren()
         heartNode.removeAllChildren()
         
+        // ゲームオーバー表示を隠す
         gameOverLabelNode.isHidden = true
         // BGMをもう一度再生する
         let restartPlaying = SKAction.play()
