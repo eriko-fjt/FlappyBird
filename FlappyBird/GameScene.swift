@@ -93,7 +93,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(bgmNode)
         
         
-        
         // メソッドに分割した各種スプライトを生成する処理を実行する
         setupGround()
         setupCloud()
@@ -222,7 +221,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             sprite.zPosition = -100
             
-            
+
             sprite.position = CGPoint(
                 x: cloudTexture.size().width / 2 + cloudTexture.size().width * CGFloat(i),
                 y: self.size.height - cloudTexture.size().height / 2
@@ -390,33 +389,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    // 鳥が画面外に出てしまった時の判定用、デッドラインの設定
+    // 鳥が画面のフレーム左端にまで押されてきて触れた時の判定用、デッドラインの設定
     func setupDeadline() {
         // 地面の色を読み込む
         let deadlineTexture = SKTexture(imageNamed: "wall")
         deadlineTexture.filteringMode = .nearest
         
         
-        
-        
         // deadline のスプライトを設置する
         let sprite = SKSpriteNode(texture: deadlineTexture)
         
+        // 高さが足りないので、フレームの高さにまで拡大するための情報を入れた変数
         let magnifiedSize = CGSize(width: deadlineTexture.size().width, height: self.frame.size.height)
-        
         sprite.scale(to: magnifiedSize)
         
+        // スプライトの位置を決める時のX座標を決めるために必要
         let wallSize = SKTexture(imageNamed: "wall").size()
-        
             
-            // スプライトの表示する位置を指定
+        // スプライトの表示する位置を指定
         sprite.position = CGPoint(
             x: 0 - wallSize.width / 2,  // フレームの左端
             y: self.frame.size.height / 2
             )
             
-            // スプライトにアクションを設定
-            //sprite.run(repeatScrollGround)
             
             // スプライトに物理演算を設定
             sprite.physicsBody = SKPhysicsBody(rectangleOf: deadlineTexture.size())
@@ -426,7 +421,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             // 衝突時に動かないように設定 　(7.2で追加）
             sprite.physicsBody?.isDynamic = false
-            
             
             // スプライトを追加する
             scrollNode.addChild(sprite)
