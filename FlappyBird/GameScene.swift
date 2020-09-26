@@ -1,10 +1,4 @@
-//
-//  GameScene.swift
-//  FlappyBird
-//
-//  Created by 藤田恵梨子 on 2020/07/19.
-//  Copyright © 2020 eriko.fujita. All rights reserved.
-//
+
 
 import SpriteKit
 import AVFoundation
@@ -16,7 +10,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wallNode: SKNode!
     var bird: SKSpriteNode!
     var itemNode: SKNode! // 課題
-    var heartNode: SKNode! // 課題（余裕があれば。まずは、アイテムのみ実装する）
+    var heartNode: SKNode! // 課題
     
     // 衝突判定カテゴリー (7.4で追加）
     let birdCategory: UInt32 = 1 << 0     // 0...000001
@@ -50,17 +44,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameOverLabelNode:SKLabelNode!
     
     
-    // 課題　BGM、効果音を登録　　効果音は、クレジット不要のフリー素材、　今回、BGMは、著作権表示が必要な素材を使用
+    // 課題　BGM、効果音を登録　　効果音は、クレジット不要のフリー素材。今回のBGMは、著作権表示が必要な素材を使用
     // 各効果音のPathは、関数を作成し、その中で取得した。
     var itemGetPlayer: AVAudioPlayer!
     var heartGetPlayer: AVAudioPlayer!
     var crashPlayer: AVAudioPlayer!
     //var downOnGroundPlayer: AVAudioPlayer!  // 地面との衝突判定が個別に必要になるので、コードを書くのに少々手間がかかるのでやめる。
+    
+    //BGM用のノード
     var bgmNode = SKAudioNode()    // BGMは、SKAudioNode()で実装
 
     
     // BGMのクレジット表示のためのラベル
-    var bgmCreditLabelNode: SKLabelNode!   // ”BGM: MusMus”を表記。このアプリは一般公開向けではないが、念のため、著作権表示規約がある音楽は画面に表示する
+    // BGM素材は、「フリーBGM・音楽素材MusMus http://musmus.main.jp/」より使わせていただきました
+    var bgmCreditLabelNode: SKLabelNode!   // BGM再生中は、”BGM:MusMus”を表示する。このアプリは一般公開向けではないが、念のため、著作権表示規約がある音楽は画面に表示する
     
     
     
@@ -114,7 +111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabelNode.isHidden = true
     }
     
-    // 課題　数が多くなったので、各効果音用のプレイヤーに音源をセットする関数を作る
+    // 課題　数が多くなったので、didMoveの中とは別に、各効果音用のプレイヤーに音源をセットする関数を作る
     func setupSoundPlayer() {
         
         let itemGetPath = Bundle.main.bundleURL.appendingPathComponent("itemGet1.mp3")
@@ -142,7 +139,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } catch {
             print("クラッシュ音、取得エラー")
         }
-        
         
     }
     
@@ -754,6 +750,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //　壁か地面と衝突した
             crashPlayer.currentTime = 0 // 巻き戻しておく. play()後に巻き戻すべき？？
             crashPlayer.play()
+            
              
             heartPoint -= 1
             heartPointLabelNode.text = " ❤️ x \(heartPoint)"
@@ -893,13 +890,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(gameOverLabelNode)
 
     }
-    
-    
-    
-
-    
-    
-    
-    
     
 }
